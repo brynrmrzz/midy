@@ -1,16 +1,25 @@
 import React from 'react';
 
-const SequenceList = ({ sequenceList }) => {
+const SequenceList = ({ sequenceList, changeSequence }) => {
 
 
   return (
     <div className='sequence-list'>
       {
         (sequenceList) && (
-          sequenceList.map((sequence, idx) => {
+          sequenceList.map((sequence) => {
             if (sequence.sequence) {
               return (
-                <div key={idx}> {sequence.sequence.join(' ')} </div>
+                <button
+                id={sequence._id}
+                key={sequence._id}
+                className='seq-btn'
+                onClick={()=>{
+                  changeSequence(sequence.sequence)
+                }}>
+                {sequence.sequence.join(' ')}
+
+                </button>
               )
             }
           })

@@ -13,25 +13,14 @@ class App extends React.Component {
       sequence: [],
       sequenceList: [],
     }
-    this.getSequences = this.getSequences.bind(this);
     this.playNote = this.playNote.bind(this);
     this.saveSequence = this.saveSequence.bind(this);
+    this.changeSequence = this.changeSequence.bind(this);
+    this.deleteSequences = this.deleteSequences.bind(this);
     this.playSequence = this.playSequence.bind(this);
     this.clearNotes = this.clearNotes.bind(this);
   }
 
-  getSequences() {
-    const { isPlaying, sequence } = this.state;
-    axios.get('/sequences')
-      .then((res) => {
-        this.setState({
-          isPlaying,
-          sequence,
-          sequenceList: res.data
-        })
-      })
-      .catch(err => console.error(err))
-  }
 
   playNote(note) {
     const synth = new Tone.PolySynth().toDestination();
@@ -47,16 +36,34 @@ class App extends React.Component {
     synth.triggerAttackRelease(`${note}4`, "8n", Tone.now());
   }
 
+  changeSequence(sequence) {
+    console.log('Sequence', sequence)
+    const { sequenceList, isPlaying } = this.state;
+    this.setState({sequence, sequenceList, isPlaying})
+  }
+
+  deleteSequences() {
+    const { sequence, isPlaying } = this.state;
+    axios.post('/delete')
+    .then((res) => {
+      this.setState({
+        sequence,
+        sequenceList: res.data,
+        isPlaying
+      })
+    })
+    .catch(err => console.error(err))
+  }
+
   saveSequence() {
-    const { sequence, sequenceList, isPlaying } = this.state;
-    if (sequence.length > 3) {
+    const { sequence  ,sequenceList ,isPlaying } = this.state;
+    if (sequence.length >= 3) {
       axios.post('/sequences', sequence)
         .then((res) => {
-          let newSequenceList = sequenceList;
-          newSequenceList.push(sequence)
+          console.log('This is resdata in saveSeq', res.data)
           this.setState({
             sequence: [],
-            sequenceList: newSequenceList,
+            sequenceList: res.data,
             isPlaying
           })
         })
@@ -80,12 +87,29 @@ class App extends React.Component {
 
 
   componentDidMount() {
-    this.getSequences();
+    axios.get('/sequences')
+      .then((res) => {
+        this.setState({
+          isPlaying: false,
+          sequence: [],
+          sequenceList: res.data
+        })
+      })
+      .catch(err => console.error(err))
   }
 
-  componentDidUpdate() {
-    this.getSequences();
-  }
+  // componentDidUpdate() {
+  //   const { isPlaying, sequence } = this.state;
+  //   axios.get('/sequences')
+  //     .then((res) => {
+  //       this.setState({
+  //         isPlaying,
+  //         sequence,
+  //         sequenceList: res.data
+  //       })
+  //     })
+  //     .catch(err => console.error(err))
+  // }
 
 
   render() {
@@ -94,13 +118,7 @@ class App extends React.Component {
         <h1> Midy </h1>
         <div id='seq-container'>
           <div id='note-list'>
-            {
-              this.state.sequence.map((note, idx) => {
-                return (
-                  <span key={idx}> {note} </span>
-                )
-              })
-            }
+            {this.state.sequence.join(' ')}
           </div>
           <div className='btn-container'>
             <button
@@ -117,11 +135,18 @@ class App extends React.Component {
               onClick={() => { this.clearNotes() }}>
               Clear
             </button>
+            <button
+              className='seq-btn'
+              onClick={() => { this.deleteSequences() }}>
+              Delete
+            </button>
           </div>
         </div>
         <div>
           <Keyboard playNote={this.playNote} />
-          <SequenceList sequenceList={this.state.sequenceList} />
+          <SequenceList
+          changeSequence={this.changeSequence}
+          sequenceList={this.state.sequenceList} />
         </div>
       </div>
     );

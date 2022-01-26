@@ -8,6 +8,7 @@ async function readSequences() {
   await client.connect();
   const sequences = await collection
   .find()
+  .sort({'_id': -1})
   .toArray();
   return sequences;
 }
@@ -19,7 +20,15 @@ async function writeSequence(sequence) {
   return write;
 }
 
+async function deleteAll() {
+  await client.connect();
+  const deleteAll = await collection
+  .deleteMany({})
+  return deleteAll
+}
+
 module.exports = {
   readSequences,
-  writeSequence
+  writeSequence,
+  deleteAll
 }
