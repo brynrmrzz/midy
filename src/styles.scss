@@ -1,0 +1,104 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik+Beastly&family=Ubuntu:wght@300&display=swap");
+
+$ubu: "Ubuntu", sans-serif;
+$furry: "Rubik Beastly", cursive;
+$primary-color: hotpink;
+$primary-light: rgb(254, 187, 221);
+$accent-color: lime;
+$accent-light: rgb(147, 255, 147);
+
+body {
+  margin: 0;
+  font-family: $ubu;
+  font-size: 1rem;
+  margin: auto;
+
+  #app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  h1 {
+    font-size: 5rem;
+    font-family: $furry;
+    font-weight: 200;
+    color: $primary-color;
+  }
+
+  .seq-btn {
+    min-width: 5rem;
+  }
+
+  .midy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: -10px 5px $accent-color;
+
+    #seq-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      #note-list {
+        color: $primary-color;
+        min-width: 30rem;
+        min-height: 4rem;
+        font-size: 1.5rem;
+        font-family: $furry;
+        text-align: center;
+        font-weight: 200;
+      }
+
+      .seq-btn {
+        color: $accent-light;
+        background-color: $primary-color;
+        font-family: $furry;
+        font-weight: 100;
+        font-size: 2rem;
+        margin: 1rem;
+        border: 0rem;
+        min-width: 3rem;
+        border-radius: 4rem;
+      }
+
+      .seq-btn:hover {
+        background-color: $primary-light;
+        box-shadow: -10px 5px $primary-color;
+      }
+    }
+
+    #keyboard-container {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      flex-shrink: 0;
+      align-items: center;
+    }
+
+    .sequence-list {
+      color: $primary-color;
+      font-family: $furry;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+}
+
+.note-btn {
+  color: $primary-color;
+  background-color: $accent-color;
+  font-family: $furry;
+  font-size: 1.5rem;
+  margin: 1rem;
+  border: 0rem;
+  min-width: 3rem;
+  border-radius: 4rem;
+}
+
+.note-btn:hover {
+  background-color: $accent-light;
+  box-shadow: -10px 5px $accent-color;
+}
